@@ -163,10 +163,14 @@ cython_debug/
 # Model checkpoints and saved models
 checkpoints/
 saved_models/
-models/
 model_output/
 weights/
 pretrained/
+
+# Trained model files (but not source code)
+saved_models/**/*.h5
+saved_models/**/*.pth
+saved_models/**/*.pkl
 
 # TensorBoard logs
 logs/
@@ -214,14 +218,15 @@ preprocessed/
 *.mnc
 
 # Large CSV/data files
-*.csv
 *.tsv
-*.txt
-*.json
 *.xml
 *.parquet
 *.feather
 *.arrow
+
+# Specific large data text files (add patterns as needed)
+data/**/*.txt
+raw_data/**/*.txt
 
 # Database files
 *.db
