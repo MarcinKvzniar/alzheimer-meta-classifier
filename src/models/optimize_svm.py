@@ -1,5 +1,5 @@
 """
-Random Forest parameter optimization for Alzheimer's disease classification.
+SVM parameter optimization for Alzheimer's disease classification.
 Tests different hyperparameter combinations and compares their performance.
 """
 
@@ -9,7 +9,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.models.random_forest_classifier import RandomForestAlzheimerClassifier
+from src.models.svm_classifier import SVMAlzheimerClassifier
 from src.data.combined_data_loader import load_combined_alzheimer_data
 from sklearn.metrics import (
     accuracy_score,
@@ -23,9 +23,9 @@ from typing import Dict, List, Tuple, Any
 import json
 
 
-class RandomForestOptimizer:
+class SVMOptimizer:
     """
-    Optimizer for finding the best Random Forest hyperparameters.
+    Optimizer for finding the best SVM hyperparameters.
     """
 
     def __init__(self, train_dataset, val_dataset, test_dataset):
@@ -51,83 +51,93 @@ class RandomForestOptimizer:
         """
         param_configs = [
             {
-                'name': 'Baseline',
-                'n_estimators': 200,
-                'max_depth': None,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'Baseline RBF',
+                'kernel': 'rbf',
+                'C': 1.0,
+                'gamma': 'scale',
+                'use_pca': True,
+                'n_components': 50
             },
-            # More trees
+            # Linear kernel
             {
-                'name': 'More Trees',
-                'n_estimators': 500,
-                'max_depth': None,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'Linear',
+                'kernel': 'linear',
+                'C': 1.0,
+                'gamma': 'scale',
+                'use_pca': True,
+                'n_components': 50
             },
-            # Limited depth (prevent overfitting)
+            # Polynomial kernel
             {
-                'name': 'Limited Depth',
-                'n_estimators': 200,
-                'max_depth': 10,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'Polynomial',
+                'kernel': 'poly',
+                'C': 1.0,
+                'gamma': 'scale',
+                'use_pca': True,
+                'n_components': 50
             },
-            # Conservative (more regularization)
+            # High C (less regularization)
             {
-                'name': 'Conservative',
-                'n_estimators': 300,
-                'max_depth': 8,
-                'min_samples_split': 10,
-                'min_samples_leaf': 5
+                'name': 'High C',
+                'kernel': 'rbf',
+                'C': 10.0,
+                'gamma': 'scale',
+                'use_pca': True,
+                'n_components': 50
             },
-            # Aggressive (less regularization)
+            # Low C (more regularization)
             {
-                'name': 'Aggressive',
-                'n_estimators': 150,
-                'max_depth': None,
-                'min_samples_split': 2,
-                'min_samples_leaf': 1
+                'name': 'Low C',
+                'kernel': 'rbf',
+                'C': 0.1,
+                'gamma': 'scale',
+                'use_pca': True,
+                'n_components': 50
             },
-            # Fast training (fewer trees, limited depth)
+            # Auto gamma
             {
-                'name': 'Fast Training',
-                'n_estimators': 100,
-                'max_depth': 6,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'Auto Gamma',
+                'kernel': 'rbf',
+                'C': 1.0,
+                'gamma': 'auto',
+                'use_pca': True,
+                'n_components': 50
             },
-            # High capacity (many trees, moderate depth)
+            # High gamma
             {
-                'name': 'High Capacity',
-                'n_estimators': 400,
-                'max_depth': 12,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'High Gamma',
+                'kernel': 'rbf',
+                'C': 1.0,
+                'gamma': 0.1,
+                'use_pca': True,
+                'n_components': 50
             },
-            # Balanced regularization
+            # Low gamma
             {
-                'name': 'Balanced',
-                'n_estimators': 250,
-                'max_depth': 10,
-                'min_samples_split': 8,
-                'min_samples_leaf': 3
+                'name': 'Low Gamma',
+                'kernel': 'rbf',
+                'C': 1.0,
+                'gamma': 0.001,
+                'use_pca': True,
+                'n_components': 50
             },
-            # Very deep trees
+            # No PCA
             {
-                'name': 'Very Deep',
-                'n_estimators': 150,
-                'max_depth': 15,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'No PCA',
+                'kernel': 'rbf',
+                'C': 1.0,
+                'gamma': 'scale',
+                'use_pca': False,
+                'n_components': 50
             },
-            # Shallow but wide
+            # High dimensional PCA
             {
-                'name': 'Shallow Wide',
-                'n_estimators': 600,
-                'max_depth': 5,
-                'min_samples_split': 5,
-                'min_samples_leaf': 2
+                'name': 'High Dim PCA',
+                'kernel': 'rbf',
+                'C': 1.0,
+                'gamma': 'scale',
+                'use_pca': True,
+                'n_components': 50 
             }
         ]
 
@@ -150,7 +160,7 @@ class RandomForestOptimizer:
         print(f"{'='*80}")
 
         start_time = time.time()
-        classifier = RandomForestAlzheimerClassifier(**params, random_state=42, use_scaling=True)
+        classifier = SVMAlzheimerClassifier(**params, random_state=42)
 
         print("Training model...")
         classifier.train(self.train_dataset)
@@ -250,17 +260,18 @@ class RandomForestOptimizer:
         param_configs = self.define_parameter_grid()
 
         print(f"\n{'#'*80}")
-        print(f"# Starting Random Forest Optimization")
+        print(f"# Starting SVM Optimization")
         print(f"# Testing {len(param_configs)} different configurations")
         print(f"# Dataset sizes: Train={len(self.train_dataset)}, Val={len(self.val_dataset)}, Test={len(self.test_dataset)}")
         print(f"{'#'*80}\n")
 
         for config in param_configs:
+            config_name = config['name']
             try:
                 result = self.train_and_evaluate(config)
                 self.results.append(result)
             except Exception as e:
-                print(f"Error with configuration {config['name']}: {str(e)}")
+                print(f"Error with configuration {config_name}: {str(e)}")
                 continue
 
         return self.results
@@ -352,7 +363,7 @@ def main():
     labels = [example['label'] for example in train_data]
     print(f"  Classes: {np.unique(labels)}")
 
-    optimizer = RandomForestOptimizer(
+    optimizer = SVMOptimizer(
         train_data, val_data, test_data
     )
 
@@ -360,7 +371,7 @@ def main():
 
     optimizer.print_summary()
 
-    optimizer.save_results("random_forest_optimization_results.json")
+    optimizer.save_results("svm_optimization_results.json")
 
     print("\nOptimization complete!")
 

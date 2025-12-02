@@ -50,7 +50,6 @@ class GradientBoostingOptimizer:
             List of parameter dictionaries
         """
         param_configs = [
-            # Baseline configuration
             {
                 'name': 'Baseline',
                 'n_estimators': 100,
@@ -60,7 +59,6 @@ class GradientBoostingOptimizer:
                 'min_samples_leaf': 2,
                 'subsample': 0.8
             },
-            # More trees, slower learning
             {
                 'name': 'More Trees, Lower LR',
                 'n_estimators': 200,
@@ -170,7 +168,6 @@ class GradientBoostingOptimizer:
         print(f"Parameters: {params}")
         print(f"{'='*80}")
         
-        # Create and train classifier
         start_time = time.time()
         classifier = GradientBoostingAlzheimerClassifier(**params, random_state=42)
         
@@ -178,7 +175,6 @@ class GradientBoostingOptimizer:
         classifier.train(self.train_dataset)
         training_time = time.time() - start_time
         
-        # Evaluate on validation set
         print("Evaluating on validation set...")
         val_start = time.time()
         y_val_pred = []
@@ -194,7 +190,6 @@ class GradientBoostingOptimizer:
             y_val_true, y_val_pred, average='weighted', zero_division=0
         )
         
-        # Evaluate on test set
         print("Evaluating on test set...")
         test_start = time.time()
         y_test_pred = []
@@ -210,15 +205,12 @@ class GradientBoostingOptimizer:
             y_test_true, y_test_pred, average='weighted', zero_division=0
         )
         
-        # Per-class metrics
         per_class_precision, per_class_recall, per_class_f1, support = precision_recall_fscore_support(
             y_test_true, y_test_pred, average=None, zero_division=0
         )
         
-        # Confusion matrix
         conf_matrix = confusion_matrix(y_test_true, y_test_pred)
         
-        # Print results
         print(f"\nValidation Results:")
         print(f"  Accuracy:  {val_accuracy:.4f}")
         print(f"  Precision: {val_precision:.4f}")
@@ -236,7 +228,6 @@ class GradientBoostingOptimizer:
         print(f"  Val pred time:   {val_time:.2f}s")
         print(f"  Test pred time:  {test_time:.2f}s")
         
-        # Store results
         result = {
             'name': config_name,
             'parameters': params,
@@ -303,18 +294,15 @@ class GradientBoostingOptimizer:
         print(f"OPTIMIZATION SUMMARY - COMPARISON OF ALL CONFIGURATIONS")
         print(f"{'='*100}\n")
         
-        # Sort by validation F1 score
         sorted_results = sorted(
             self.results, 
             key=lambda x: x['validation']['f1_score'], 
             reverse=True
         )
         
-        # Print header
         print(f"{'Rank':<6} {'Configuration':<25} {'Val Acc':<10} {'Val F1':<10} {'Test Acc':<10} {'Test F1':<10} {'Train Time':<12}")
         print(f"{'-'*100}")
         
-        # Print each configuration
         for idx, result in enumerate(sorted_results, 1):
             name = result['name']
             val_acc = result['validation']['accuracy']
@@ -328,7 +316,6 @@ class GradientBoostingOptimizer:
         
         print(f"\n{'='*100}")
         
-        # Best configuration details
         best = sorted_results[0]
         print(f"\n🏆 BEST CONFIGURATION: {best['name']}")
         print(f"\nParameters:")
@@ -368,12 +355,11 @@ def main():
     """Main function to run the optimization."""
     print("Loading Alzheimer's disease dataset...")
     
-    # Load data
     train_data, val_data, test_data = load_combined_alzheimer_data(
         use_huggingface=True,
         use_local=True,
-        val_size=0.15,
-        test_size=0.15,
+        val_size=0.1,
+        test_size=0.2,
         random_state=42
     )
     
@@ -382,22 +368,17 @@ def main():
     print(f"  Validation samples: {len(val_data)}")
     print(f"  Test samples:       {len(test_data)}")
     
-    # Get class distribution from training data
     labels = [example['label'] for example in train_data]
     print(f"  Classes: {np.unique(labels)}")
     
-    # Create optimizer and run
     optimizer = GradientBoostingOptimizer(
         train_data, val_data, test_data
     )
     
-    # Run optimization
     results = optimizer.optimize()
     
-    # Print summary
     optimizer.print_summary()
     
-    # Save results
     optimizer.save_results("gradient_boosting_optimization_results.json")
     
     print("\nOptimization complete!")

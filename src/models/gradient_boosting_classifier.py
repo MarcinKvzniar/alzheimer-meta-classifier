@@ -82,16 +82,13 @@ class GradientBoostingAlzheimerClassifier:
         Returns:
             Feature vector as numpy array
         """
-        # Resize image for consistent feature extraction
         img_resized = np.array(image.resize((96, 96)))
         
-        # Handle grayscale images
         if len(img_resized.shape) == 2:
             img_resized = np.stack([img_resized] * 3, axis=-1)
         
         features = []
         
-        # === Global Statistics ===
         features.extend([
             img_resized.mean(),
             img_resized.std(),
@@ -105,7 +102,6 @@ class GradientBoostingAlzheimerClassifier:
             img_resized.var(),
         ])
         
-        # === Per-Channel Statistics ===
         for channel in range(3):
             channel_data = img_resized[:, :, channel]
             features.extend([
@@ -117,10 +113,10 @@ class GradientBoostingAlzheimerClassifier:
                 channel_data.var(),
             ])
         
-        # === Convert to grayscale for texture analysis ===
+        # grayscale for texture analysis
         gray = np.mean(img_resized, axis=2).astype(np.float32)
         
-        # === Gradient Features ===
+        # features
         grad_x = np.gradient(gray, axis=1)
         grad_y = np.gradient(gray, axis=0)
         grad_magnitude = np.sqrt(grad_x**2 + grad_y**2)
@@ -139,21 +135,17 @@ class GradientBoostingAlzheimerClassifier:
         edge_density = (grad_magnitude > edge_threshold).sum() / grad_magnitude.size
         features.append(edge_density)
         
-        # === Histogram Features (multiple bins) ===
         hist, _ = np.histogram(img_resized.flatten(), bins=20, range=(0, 256))
         hist_normalized = hist / hist.sum()
         features.extend(hist_normalized.tolist())
         
-        # === Entropy ===
         hist_prob = hist_normalized[hist_normalized > 0]
         entropy = -np.sum(hist_prob * np.log2(hist_prob))
         features.append(entropy)
         
-        # === Local Statistics (divide into regions) ===
         h, w = gray.shape
         h_third, w_third = h // 3, w // 3
         
-        # 3x3 grid
         for i in range(3):
             for j in range(3):
                 region = gray[i*h_third:(i+1)*h_third, j*w_third:(j+1)*w_third]
@@ -162,12 +154,10 @@ class GradientBoostingAlzheimerClassifier:
                     region.std(),
                 ])
         
-        # === Contrast and Brightness ===
         contrast = img_resized.std()
         brightness = img_resized.mean()
         features.extend([contrast, brightness])
         
-        # === Higher-order statistics ===
         from scipy import stats
         flattened = img_resized.flatten()
         features.extend([
@@ -189,14 +179,13 @@ class GradientBoostingAlzheimerClassifier:
             diff_diag2
         ])
         
-        # === Symmetry features ===
         left_half = gray[:, :w//2]
         right_half = np.fliplr(gray[:, w//2:])
         min_width = min(left_half.shape[1], right_half.shape[1])
         symmetry_score = np.mean(np.abs(left_half[:, :min_width] - right_half[:, :min_width]))
         features.append(symmetry_score)
         
-        # === Frequency domain features (simple) ===
+        # f-domain features
         fft = np.fft.fft2(gray)
         fft_magnitude = np.abs(fft)
         fft_magnitude_shifted = np.fft.fftshift(fft_magnitude)
@@ -251,15 +240,12 @@ class GradientBoostingAlzheimerClassifier:
         print("Training Gradient Boosting Classifier")
         print("=" * 80)
         
-        # Extract features
         X_train, y_train = self._prepare_features(train_dataset)
         
-        # Apply scaling if enabled
         if self.use_scaling:
             print("\nApplying feature scaling...")
             X_train = self.scaler.fit_transform(X_train)
         
-        # Train model
         print("\nTraining Gradient Boosting model...")
         print(f"  - Number of estimators: {self.model.n_estimators}")
         print(f"  - Learning rate: {self.model.learning_rate}")
@@ -271,12 +257,10 @@ class GradientBoostingAlzheimerClassifier:
         self.is_trained = True
         print("Training completed!")
         
-        # Evaluate on training set
         train_pred = self.model.predict(X_train)
         train_accuracy = accuracy_score(y_train, train_pred)
         print(f"\nTraining Accuracy: {train_accuracy:.4f}")
         
-        # Get training deviance
         self.training_history = self.model.train_score_.tolist()
         if verbose:
             print(f"Final training deviance: {self.training_history[-1]:.4f}")
@@ -286,7 +270,6 @@ class GradientBoostingAlzheimerClassifier:
             'training_history': self.training_history
         }
         
-        # Evaluate on validation set if provided
         if val_dataset is not None:
             print("\n" + "=" * 80)
             print("Validation Evaluation")
@@ -310,24 +293,19 @@ class GradientBoostingAlzheimerClassifier:
         if not self.is_trained:
             raise ValueError("Model not trained. Call train() first.")
         
-        # Extract features
         X_test, y_test = self._prepare_features(test_dataset)
         
-        # Apply scaling if enabled
         if self.use_scaling:
             X_test = self.scaler.transform(X_test)
         
-        # Make predictions
         y_pred = self.model.predict(X_test)
         y_proba = self.model.predict_proba(X_test)
         
-        # Calculate metrics
         accuracy = accuracy_score(y_test, y_pred)
         precision, recall, f1, _ = precision_recall_fscore_support(
             y_test, y_pred, average='weighted', zero_division=0
         )
         
-        # Calculate AUC
         try:
             n_classes = len(np.unique(y_test))
             if n_classes == 2:
@@ -337,7 +315,6 @@ class GradientBoostingAlzheimerClassifier:
         except Exception:
             auc = None
         
-        # Print results
         print(f"\n{dataset_name} Set Evaluation Results")
         print("-" * 80)
         print(f"Accuracy:  {accuracy:.4f}")
@@ -353,7 +330,6 @@ class GradientBoostingAlzheimerClassifier:
         print("\nConfusion Matrix:")
         print(confusion_matrix(y_test, y_pred))
         
-        # Feature importance
         feature_importance = self.model.feature_importances_
         top_k = 10
         top_indices = np.argsort(feature_importance)[-top_k:][::-1]
@@ -491,7 +467,6 @@ def main():
     print("Gradient Boosting Classifier for Alzheimer's Disease Classification")
     print("=" * 80)
     
-    # Load data (combined HuggingFace + Local)
     print("\nLoading combined dataset (HuggingFace + Local)...")
     train_data, val_data, test_data = load_combined_alzheimer_data(
         use_huggingface=True,
@@ -501,35 +476,26 @@ def main():
         random_state=42
     )
     
-    # Create classifier
     print("\nInitializing Gradient Boosting classifier...")
     classifier = GradientBoostingAlzheimerClassifier(
-        n_estimators=100,
-        learning_rate=0.1,
-        max_depth=5,
-        min_samples_split=4,
-        min_samples_leaf=2,
-        subsample=0.8,
+        n_estimators=150,
+        learning_rate=0.15,
+        max_depth=8,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        subsample=0.9,
         random_state=42,
         use_scaling=True
     )
     
-    # Use subset for faster testing (remove for full training)
-    # print("\nNote: Using subset of data for demonstration...")
-    # train_subset = train_data.select(range(min(1000, len(train_data))))
-    # val_subset = val_data.select(range(min(200, len(val_data))))
-    # test_subset = test_data.select(range(min(200, len(test_data))))
     
-    # Train
     train_results = classifier.train(train_data, val_data)
     
-    # Evaluate on test set
     print("\n" + "=" * 80)
     print("Test Set Evaluation")
     print("=" * 80)
     test_metrics = classifier.evaluate(test_data, dataset_name="Test")
     
-    # Test single prediction
     print("\n" + "=" * 80)
     print("Single Image Prediction Test")
     print("=" * 80)
@@ -544,7 +510,6 @@ def main():
     print(f"Class Probabilities: {probabilities}")
     print(f"Prediction Confidence: {probabilities[prediction]:.4f}")
     
-    # Test staged predictions
     print("\n" + "=" * 80)
     print("Staged Predictions Analysis")
     print("=" * 80)
@@ -555,7 +520,6 @@ def main():
     for stage, pred in zip(stages_to_check, staged_preds):
         print(f"  After {stage+1} trees: {pred}")
     
-    # Save model
     model_path = project_root / "models" / "gradient_boosting_model.pkl"
     model_path.parent.mkdir(parents=True, exist_ok=True)
     classifier.save_model(str(model_path))

@@ -78,16 +78,13 @@ class SVMAlzheimerClassifier:
         Returns:
             Feature vector as numpy array
         """
-        # Resize image for consistent feature extraction
         img_resized = np.array(image.resize((64, 64)))
         
-        # Handle grayscale images
         if len(img_resized.shape) == 2:
             img_resized = np.stack([img_resized] * 3, axis=-1)
         
         features = []
         
-        # Global statistics
         features.extend([
             img_resized.mean(),
             img_resized.std(),
@@ -100,7 +97,6 @@ class SVMAlzheimerClassifier:
             np.percentile(img_resized, 90),
         ])
         
-        # Per-channel statistics
         for channel in range(3):
             channel_data = img_resized[:, :, channel]
             features.extend([
@@ -112,10 +108,8 @@ class SVMAlzheimerClassifier:
                 channel_data.var(),
             ])
         
-        # Convert to grayscale for texture analysis
         gray = np.mean(img_resized, axis=2).astype(np.float32)
         
-        # Gradient features
         grad_x = np.gradient(gray, axis=1)
         grad_y = np.gradient(gray, axis=0)
         grad_magnitude = np.sqrt(grad_x**2 + grad_y**2)
@@ -127,22 +121,18 @@ class SVMAlzheimerClassifier:
             grad_magnitude.min(),
         ])
         
-        # Edge density
         edge_threshold = grad_magnitude.mean() + grad_magnitude.std()
         edge_density = (grad_magnitude > edge_threshold).sum() / grad_magnitude.size
         features.append(edge_density)
         
-        # Histogram features (more bins for better representation)
         hist, _ = np.histogram(img_resized.flatten(), bins=16, range=(0, 256))
         hist_normalized = hist / hist.sum()
         features.extend(hist_normalized.tolist())
         
-        # Entropy
         hist_prob = hist_normalized[hist_normalized > 0]
         entropy = -np.sum(hist_prob * np.log2(hist_prob))
         features.append(entropy)
         
-        # Local statistics (divide image into quadrants)
         h, w = gray.shape
         h_mid, w_mid = h // 2, w // 2
         quadrants = [
@@ -158,12 +148,10 @@ class SVMAlzheimerClassifier:
                 quadrant.std(),
             ])
         
-        # Contrast and brightness
         contrast = img_resized.std()
         brightness = img_resized.mean()
         features.extend([contrast, brightness])
         
-        # Skewness and kurtosis (shape of distribution)
         from scipy import stats
         flattened = img_resized.flatten()
         features.extend([
@@ -214,25 +202,20 @@ class SVMAlzheimerClassifier:
         print("Training SVM Classifier")
         print("=" * 80)
         
-        # Extract features
         X_train, y_train = self._prepare_features(train_dataset)
         
-        # Apply scaling
         print("\nApplying feature scaling...")
         X_train = self.scaler.fit_transform(X_train)
         
-        # Apply PCA if enabled
         if self.use_pca:
             print(f"\nApplying PCA (reducing to {self.n_components} components)...")
             print(f"  Original feature dimension: {X_train.shape[1]}")
             X_train = self.pca.fit_transform(X_train)
             print(f"  Reduced feature dimension: {X_train.shape[1]}")
             
-            # Print explained variance
             explained_variance = self.pca.explained_variance_ratio_.sum()
             print(f"  Explained variance: {explained_variance:.4f}")
         
-        # Train model
         print("\nTraining SVM model...")
         print(f"  - Kernel: {self.model.kernel}")
         print(f"  - C: {self.model.C}")
@@ -242,17 +225,14 @@ class SVMAlzheimerClassifier:
         self.is_trained = True
         print("Training completed!")
         
-        # Evaluate on training set
         train_pred = self.model.predict(X_train)
         train_accuracy = accuracy_score(y_train, train_pred)
         print(f"\nTraining Accuracy: {train_accuracy:.4f}")
         
-        # Print support vectors info
         print(f"Number of support vectors: {self.model.n_support_}")
         
         results = {'train_accuracy': train_accuracy}
         
-        # Evaluate on validation set if provided
         if val_dataset is not None:
             print("\n" + "=" * 80)
             print("Validation Evaluation")
@@ -276,25 +256,20 @@ class SVMAlzheimerClassifier:
         if not self.is_trained:
             raise ValueError("Model not trained. Call train() first.")
         
-        # Extract features
         X_test, y_test = self._prepare_features(test_dataset)
         
-        # Apply transformations
         X_test = self.scaler.transform(X_test)
         if self.use_pca:
             X_test = self.pca.transform(X_test)
         
-        # Make predictions
         y_pred = self.model.predict(X_test)
         y_proba = self.model.predict_proba(X_test)
         
-        # Calculate metrics
         accuracy = accuracy_score(y_test, y_pred)
         precision, recall, f1, _ = precision_recall_fscore_support(
             y_test, y_pred, average='weighted', zero_division=0
         )
         
-        # Calculate AUC
         try:
             n_classes = len(np.unique(y_test))
             if n_classes == 2:
@@ -304,7 +279,6 @@ class SVMAlzheimerClassifier:
         except Exception:
             auc = None
         
-        # Print results
         print(f"\n{dataset_name} Set Evaluation Results")
         print("-" * 80)
         print(f"Accuracy:  {accuracy:.4f}")
@@ -421,7 +395,6 @@ def main():
     print("SVM Classifier for Alzheimer's Disease Classification")
     print("=" * 80)
     
-    # Load data (combined HuggingFace + Local)
     print("\nLoading combined dataset (HuggingFace + Local)...")
     train_data, val_data, test_data = load_combined_alzheimer_data(
         use_huggingface=True,
@@ -431,38 +404,29 @@ def main():
         random_state=42
     )
     
-    # Create classifier
     print("\nInitializing SVM classifier...")
     classifier = SVMAlzheimerClassifier(
         kernel='rbf',
-        C=10.0,
-        gamma='scale',
+        C=1.0,
+        gamma=0.1,
         use_pca=True,
         n_components=50,
         random_state=42
     )
     
-    # Use subset for faster testing (remove for full training)
-    print("\nNote: Using subset of data for demonstration...")
-    train_subset = train_data.select(range(min(1000, len(train_data))))
-    val_subset = val_data.select(range(min(200, len(val_data))))
-    test_subset = test_data.select(range(min(200, len(test_data))))
     
-    # Train
-    train_results = classifier.train(train_subset, val_subset)
+    train_results = classifier.train(train_data, val_data)
     
-    # Evaluate on test set
     print("\n" + "=" * 80)
     print("Test Set Evaluation")
     print("=" * 80)
-    test_metrics = classifier.evaluate(test_subset, dataset_name="Test")
+    test_metrics = classifier.evaluate(test_data, dataset_name="Test")
     
-    # Test single prediction
     print("\n" + "=" * 80)
     print("Single Image Prediction Test")
     print("=" * 80)
-    sample_image = test_subset[0]['image']
-    sample_label = test_subset[0]['label']
+    sample_image = test_data[0]['image']
+    sample_label = test_data[0]['label']
     
     prediction = classifier.predict(sample_image)
     probabilities = classifier.predict_proba(sample_image)
@@ -472,7 +436,6 @@ def main():
     print(f"Class Probabilities: {probabilities}")
     print(f"Prediction Confidence: {probabilities[prediction]:.4f}")
     
-    # Save model
     model_path = project_root / "models" / "svm_model.pkl"
     model_path.parent.mkdir(parents=True, exist_ok=True)
     classifier.save_model(str(model_path))
