@@ -10,7 +10,6 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import random
 
-# Add project root to path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
@@ -115,7 +114,6 @@ class CombinedAlzheimerDataLoader:
         
         all_data = []
         
-        # Load HuggingFace dataset
         if self.use_huggingface:
             print("\n[1/2] Loading HuggingFace Dataset...")
             print("-" * 80)
@@ -123,7 +121,6 @@ class CombinedAlzheimerDataLoader:
                 self.hf_loader = AlzheimerDataLoader(self.hf_dataset_name)
                 hf_dataset = self.hf_loader.load_data(split='train')
                 
-                # Convert to list of dicts
                 hf_data = []
                 for i in range(len(hf_dataset)):
                     hf_data.append({
@@ -139,7 +136,6 @@ class CombinedAlzheimerDataLoader:
                 if not self.use_local:
                     raise
         
-        # Load local dataset
         if self.use_local:
             print("\n[2/2] Loading Local Dataset...")
             print("-" * 80)
@@ -147,7 +143,6 @@ class CombinedAlzheimerDataLoader:
                 self.local_loader = LocalAlzheimerDataLoader(self.local_data_dir)
                 self.local_loader.load_data()
                 
-                # Convert to list of dicts
                 local_data = []
                 for img_path, label in zip(self.local_loader.images, self.local_loader.labels):
                     local_data.append({
@@ -238,22 +233,18 @@ class CombinedAlzheimerDataLoader:
         print("SPLITTING COMBINED DATA")
         print("=" * 80)
         
-        # Set random seeds
         random.seed(random_state)
         np.random.seed(random_state)
         
-        # Shuffle data if requested
         data = self.combined_data.copy()
         if shuffle:
             random.shuffle(data)
         
-        # Extract labels for stratification
         labels = [item['label'] for item in data]
         indices = np.arange(len(data))
         
         stratify_labels = labels if stratify else None
         
-        # First split: separate test set
         train_val_idx, test_idx = train_test_split(
             indices,
             test_size=test_size,
@@ -261,7 +252,6 @@ class CombinedAlzheimerDataLoader:
             stratify=stratify_labels
         )
         
-        # Second split: separate validation from training
         if stratify:
             stratify_train = [labels[i] for i in train_val_idx]
         else:
@@ -274,7 +264,6 @@ class CombinedAlzheimerDataLoader:
             stratify=stratify_train
         )
         
-        # Create datasets
         train_data = [data[i] for i in train_idx]
         val_data = [data[i] for i in val_idx]
         test_data = [data[i] for i in test_idx]
@@ -288,7 +277,6 @@ class CombinedAlzheimerDataLoader:
         print(f"  - Validation set: {len(val_data):5d} images")
         print(f"  - Test set:       {len(test_data):5d} images")
         
-        # Print source distribution for each split
         print("\nSource distribution per split:")
         for split_name, split_data in [('Train', train_data), ('Val', val_data), ('Test', test_data)]:
             sources = [item['source'] for item in split_data]
@@ -296,7 +284,6 @@ class CombinedAlzheimerDataLoader:
             local_count = sources.count('local') if 'local' in sources else 0
             print(f"  {split_name:5s}: HuggingFace={hf_count:4d}, Local={local_count:4d}")
         
-        # Print class distribution for each split
         print("\nClass distribution per split:")
         for split_name, split_data in [('Train', train_data), ('Val', val_data), ('Test', test_data)]:
             split_labels = [item['label'] for item in split_data]
@@ -394,16 +381,13 @@ def main():
     print("COMBINED ALZHEIMER'S DATASET LOADER TEST")
     print("=" * 80)
     
-    # Initialize combined loader
     loader = CombinedAlzheimerDataLoader(
         use_huggingface=True,
         use_local=True
     )
     
-    # Load data
     combined_data = loader.load_data()
     
-    # Get dataset info
     info = loader.get_dataset_info()
     print("\nCombined Dataset Information:")
     print(f"  Total examples: {info['num_examples']}")
@@ -417,10 +401,8 @@ def main():
         percentage = (count / info['num_examples']) * 100
         print(f"    {class_name:20s}: {count:5d} ({percentage:5.2f}%)")
     
-    # Print samples
     loader.print_sample(num_samples=3)
     
-    # Split data
     train_data, val_data, test_data = loader.split_data(
         test_size=0.2,
         val_size=0.1,
