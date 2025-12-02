@@ -45,7 +45,6 @@ class LocalAlzheimerDataLoader:
         else:
             self.data_dir = Path(data_dir)
         
-        # Class mapping to match HuggingFace dataset
         self.class_mapping = {
             'MildDemented': 0,
             'ModerateDemented': 1,
@@ -84,10 +83,8 @@ class LocalAlzheimerDataLoader:
         self.images = []
         self.labels = []
         
-        # Supported image formats
         image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.tif'}
         
-        # Load images from each class folder
         for class_name, label in self.class_mapping.items():
             class_dir = self.data_dir / class_name
             
@@ -95,7 +92,6 @@ class LocalAlzheimerDataLoader:
                 print(f"Warning: Class directory not found: {class_dir}")
                 continue
             
-            # Get all image files in the directory
             image_files = [
                 f for f in class_dir.iterdir() 
                 if f.is_file() and f.suffix.lower() in image_extensions
@@ -163,7 +159,6 @@ class LocalAlzheimerDataLoader:
         
         stratify_labels = self.labels if stratify else None
         
-        # First split: separate test set
         train_val_images, test_images, train_val_labels, test_labels = train_test_split(
             self.images,
             self.labels,
@@ -172,7 +167,6 @@ class LocalAlzheimerDataLoader:
             stratify=stratify_labels
         )
         
-        # Second split: separate validation from training
         stratify_train = train_val_labels if stratify else None
         train_images, val_images, train_labels, val_labels = train_test_split(
             train_val_images,
@@ -267,7 +261,7 @@ class LocalAlzheimerDataLoader:
                 raise ValueError("Data not split. Call split_data() first.")
             image_paths = self.test_images
             labels = self.test_labels
-        else:  # 'all'
+        else:  
             if not self.images:
                 raise ValueError("Dataset not loaded. Call load_data() first.")
             image_paths = self.images
@@ -312,7 +306,6 @@ class LocalAlzheimerDataLoader:
             print(f"  Path: {img_path}")
             print(f"  Label: {label} - {class_name}")
             
-            # Try to get image size
             try:
                 img = self.load_image(img_path)
                 print(f"  Image size: {img.size}")
@@ -364,13 +357,10 @@ def main():
     print("LOCAL ALZHEIMER'S DATASET LOADER TEST")
     print("=" * 80)
     
-    # Initialize loader
     loader = LocalAlzheimerDataLoader()
     
-    # Load data
     images, labels = loader.load_data()
     
-    # Get dataset info
     info = loader.get_dataset_info()
     print("\nDataset Information:")
     print(f"  Number of examples: {info['num_examples']}")
@@ -381,10 +371,8 @@ def main():
         percentage = (count / info['num_examples']) * 100
         print(f"    {class_name:20s}: {count:5d} ({percentage:5.2f}%)")
     
-    # Print samples
     loader.print_sample(num_samples=3)
     
-    # Split data
     (train_imgs, train_lbls), (val_imgs, val_lbls), (test_imgs, test_lbls) = loader.split_data(
         test_size=0.2,
         val_size=0.1,
