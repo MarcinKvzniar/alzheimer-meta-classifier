@@ -48,7 +48,9 @@ Several machine learning classifiers are implemented for evaluation:
 
 - Random Forest  
 - Support Vector Machine (SVM)  
-- Gradient Boosting  
+- Gradient Boosting
+- CNN - residual (SE-ResNet like) classifier
+- CNN - dense (DenseNet like) classifier
 
 These allow both baseline performance evaluation and comparison with deep learning approaches.
 
@@ -118,3 +120,4 @@ A larger augmented dataset of 2D MRI slices, created from an original small data
 - **Kaggle augmented dataset** → Full-scale deep learning training, leveraging larger size and class balance.  
 - Always document dataset limitations (metadata absence, 2D slices, potential leakage).  
 - Clearly state dataset used and whether slices are 2D or augmented when reporting results, ensuring reproducibility.  
+
