@@ -171,6 +171,7 @@ pretrained/
 saved_models/**/*.h5
 saved_models/**/*.pth
 saved_models/**/*.pkl
+saved_models/**/*.pt
 
 # TensorBoard logs
 logs/

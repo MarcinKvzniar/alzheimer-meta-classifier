@@ -1,0 +1,325 @@
+Class weights: tensor([0.2494, 3.5801, 0.0701, 0.1005])
+
+Epoch 1/60
+LR: 0.000300                                                                                                                   
+Train Loss: 1.1469 | Train Acc: 0.4922
+Val   Loss: 1.0160 | Val   Acc: 0.5790 | Val F1: 0.4095
+Val Class F1s: ['0.4977', '0.1538', '0.7346', '0.2519']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.4095)
+
+Epoch 2/60
+LR: 0.000300                                                                                                                   
+Train Loss: 1.0458 | Train Acc: 0.5497
+Val   Loss: 0.9375 | Val   Acc: 0.6311 | Val F1: 0.6395
+Val Class F1s: ['0.4195', '0.8421', '0.7312', '0.5654']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.6395)
+
+Epoch 3/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.9916 | Train Acc: 0.5978
+Val   Loss: 1.3933 | Val   Acc: 0.4809 | Val F1: 0.3210
+Val Class F1s: ['0.1818', '0.0599', '0.7298', '0.3124']
+EarlyStopping counter: 1 out of 10
+
+Epoch 4/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.9512 | Train Acc: 0.6326
+Val   Loss: 0.8986 | Val   Acc: 0.6545 | Val F1: 0.5278
+Val Class F1s: ['0.2784', '0.4681', '0.7565', '0.6083']
+EarlyStopping counter: 2 out of 10
+
+Epoch 5/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.9113 | Train Acc: 0.6589
+Val   Loss: 0.9074 | Val   Acc: 0.6415 | Val F1: 0.6950
+Val Class F1s: ['0.5094', '0.9565', '0.6843', '0.6299']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.6950)
+
+Epoch 6/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.8650 | Train Acc: 0.6956
+Val   Loss: 1.0553 | Val   Acc: 0.6016 | Val F1: 0.6535
+Val Class F1s: ['0.5274', '0.8421', '0.6532', '0.5911']
+EarlyStopping counter: 1 out of 10
+
+Epoch 7/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.8253 | Train Acc: 0.7252
+Val   Loss: 0.7855 | Val   Acc: 0.7569 | Val F1: 0.7593
+Val Class F1s: ['0.7348', '0.8148', '0.8090', '0.6788']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.7593)
+
+Epoch 8/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.7823 | Train Acc: 0.7535
+Val   Loss: 0.7802 | Val   Acc: 0.7500 | Val F1: 0.7986
+Val Class F1s: ['0.7474', '0.9565', '0.7739', '0.7165']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.7986)
+
+Epoch 9/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.7513 | Train Acc: 0.7723
+Val   Loss: 0.7726 | Val   Acc: 0.7648 | Val F1: 0.7907
+Val Class F1s: ['0.7528', '0.8800', '0.7763', '0.7538']
+EarlyStopping counter: 1 out of 10
+
+Epoch 10/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.7316 | Train Acc: 0.7832
+Val   Loss: 0.7065 | Val   Acc: 0.8064 | Val F1: 0.8008
+Val Class F1s: ['0.8215', '0.7778', '0.8197', '0.7841']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.8008)
+
+Epoch 11/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.6981 | Train Acc: 0.8073
+Val   Loss: 0.6925 | Val   Acc: 0.8056 | Val F1: 0.8332
+Val Class F1s: ['0.7961', '0.9565', '0.8438', '0.7362']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.8332)
+
+Epoch 12/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.6676 | Train Acc: 0.8285
+Val   Loss: 0.7053 | Val   Acc: 0.8064 | Val F1: 0.8292
+Val Class F1s: ['0.7163', '0.9565', '0.8489', '0.7950']
+EarlyStopping counter: 1 out of 10
+
+Epoch 13/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.6225 | Train Acc: 0.8568
+Val   Loss: 0.7273 | Val   Acc: 0.7882 | Val F1: 0.7712
+Val Class F1s: ['0.8647', '0.6667', '0.7757', '0.7779']
+EarlyStopping counter: 2 out of 10
+
+Epoch 14/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.6110 | Train Acc: 0.8622
+Val   Loss: 0.5538 | Val   Acc: 0.8880 | Val F1: 0.9147
+Val Class F1s: ['0.8984', '1.0000', '0.9097', '0.8509']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9147)
+
+Epoch 15/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5894 | Train Acc: 0.8748
+Val   Loss: 0.5472 | Val   Acc: 0.9054 | Val F1: 0.9243
+Val Class F1s: ['0.9003', '1.0000', '0.9283', '0.8686']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9243)
+
+Epoch 16/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5796 | Train Acc: 0.8787
+Val   Loss: 0.5851 | Val   Acc: 0.8776 | Val F1: 0.8983
+Val Class F1s: ['0.8620', '1.0000', '0.9140', '0.8173']
+EarlyStopping counter: 1 out of 10
+
+Epoch 17/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5575 | Train Acc: 0.8962
+Val   Loss: 0.5063 | Val   Acc: 0.9306 | Val F1: 0.9484
+Val Class F1s: ['0.9434', '1.0000', '0.9402', '0.9100']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9484)
+
+Epoch 18/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5521 | Train Acc: 0.8988
+Val   Loss: 0.5619 | Val   Acc: 0.8898 | Val F1: 0.9199
+Val Class F1s: ['0.9155', '1.0000', '0.8971', '0.8672']
+EarlyStopping counter: 1 out of 10
+
+Epoch 19/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5417 | Train Acc: 0.8999
+Val   Loss: 0.5011 | Val   Acc: 0.9271 | Val F1: 0.9464
+Val Class F1s: ['0.9419', '1.0000', '0.9363', '0.9074']
+EarlyStopping counter: 2 out of 10
+
+Epoch 20/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5200 | Train Acc: 0.9157
+Val   Loss: 0.5874 | Val   Acc: 0.8811 | Val F1: 0.9028
+Val Class F1s: ['0.8833', '1.0000', '0.9181', '0.8099']
+EarlyStopping counter: 3 out of 10
+
+Epoch 21/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5108 | Train Acc: 0.9201
+Val   Loss: 0.4740 | Val   Acc: 0.9288 | Val F1: 0.9478
+Val Class F1s: ['0.9419', '1.0000', '0.9336', '0.9158']
+EarlyStopping counter: 4 out of 10
+
+Epoch 22/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.5125 | Train Acc: 0.9187
+Val   Loss: 0.5402 | Val   Acc: 0.8976 | Val F1: 0.9208
+Val Class F1s: ['0.8926', '1.0000', '0.9048', '0.8858']
+EarlyStopping counter: 5 out of 10
+
+Epoch 23/60
+LR: 0.000300                                                                                                                   
+Train Loss: 0.4870 | Train Acc: 0.9343
+Val   Loss: 0.4591 | Val   Acc: 0.9418 | Val F1: 0.9464
+Val Class F1s: ['0.9560', '0.9565', '0.9508', '0.9223']
+EarlyStopping counter: 6 out of 10
+
+Epoch 24/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.4444 | Train Acc: 0.9572
+Val   Loss: 0.4066 | Val   Acc: 0.9783 | Val F1: 0.9843
+Val Class F1s: ['0.9845', '1.0000', '0.9806', '0.9721']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9843)
+
+Epoch 25/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.4153 | Train Acc: 0.9725
+Val   Loss: 0.4014 | Val   Acc: 0.9792 | Val F1: 0.9838
+Val Class F1s: ['0.9787', '1.0000', '0.9825', '0.9742']
+EarlyStopping counter: 1 out of 10
+
+Epoch 26/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.4087 | Train Acc: 0.9771
+Val   Loss: 0.3892 | Val   Acc: 0.9852 | Val F1: 0.9879
+Val Class F1s: ['0.9814', '1.0000', '0.9886', '0.9816']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9879)
+
+Epoch 27/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.4076 | Train Acc: 0.9778
+Val   Loss: 0.3826 | Val   Acc: 0.9878 | Val F1: 0.9900
+Val Class F1s: ['0.9845', '1.0000', '0.9904', '0.9852']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9900)
+
+Epoch 28/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.4053 | Train Acc: 0.9781
+Val   Loss: 0.3840 | Val   Acc: 0.9896 | Val F1: 0.9917
+Val Class F1s: ['0.9877', '1.0000', '0.9913', '0.9876']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9917)
+
+Epoch 29/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.4051 | Train Acc: 0.9792
+Val   Loss: 0.3783 | Val   Acc: 0.9913 | Val F1: 0.9932
+Val Class F1s: ['0.9907', '1.0000', '0.9930', '0.9889']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9932)
+
+Epoch 30/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3976 | Train Acc: 0.9829
+Val   Loss: 0.3774 | Val   Acc: 0.9939 | Val F1: 0.9943
+Val Class F1s: ['0.9877', '1.0000', '0.9957', '0.9938']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9943)
+
+Epoch 31/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3972 | Train Acc: 0.9820
+Val   Loss: 0.3789 | Val   Acc: 0.9905 | Val F1: 0.9917
+Val Class F1s: ['0.9846', '1.0000', '0.9922', '0.9900']
+EarlyStopping counter: 1 out of 10
+
+Epoch 32/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3956 | Train Acc: 0.9830
+Val   Loss: 0.3758 | Val   Acc: 0.9896 | Val F1: 0.9905
+Val Class F1s: ['0.9814', '1.0000', '0.9930', '0.9877']
+EarlyStopping counter: 2 out of 10
+
+Epoch 33/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3949 | Train Acc: 0.9829
+Val   Loss: 0.3710 | Val   Acc: 0.9948 | Val F1: 0.9954
+Val Class F1s: ['0.9908', '1.0000', '0.9957', '0.9950']
+SUCCESS: Model saved to models/cnn_dense_model.pt (Best F1: 0.9954)
+
+Epoch 34/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3883 | Train Acc: 0.9860
+Val   Loss: 0.3755 | Val   Acc: 0.9878 | Val F1: 0.9899
+Val Class F1s: ['0.9845', '1.0000', '0.9913', '0.9839']
+EarlyStopping counter: 1 out of 10
+
+Epoch 35/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3929 | Train Acc: 0.9828
+Val   Loss: 0.3731 | Val   Acc: 0.9931 | Val F1: 0.9948
+Val Class F1s: ['0.9938', '1.0000', '0.9940', '0.9912']
+EarlyStopping counter: 2 out of 10
+
+Epoch 36/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3942 | Train Acc: 0.9835
+Val   Loss: 0.3699 | Val   Acc: 0.9931 | Val F1: 0.9948
+Val Class F1s: ['0.9938', '1.0000', '0.9939', '0.9913']
+EarlyStopping counter: 3 out of 10
+
+Epoch 37/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3863 | Train Acc: 0.9865
+Val   Loss: 0.3730 | Val   Acc: 0.9905 | Val F1: 0.9911
+Val Class F1s: ['0.9815', '1.0000', '0.9939', '0.9888']
+EarlyStopping counter: 4 out of 10
+
+Epoch 38/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3856 | Train Acc: 0.9875
+Val   Loss: 0.3722 | Val   Acc: 0.9905 | Val F1: 0.9922
+Val Class F1s: ['0.9877', '1.0000', '0.9922', '0.9888']
+EarlyStopping counter: 5 out of 10
+
+Epoch 39/60
+LR: 0.000030                                                                                                                   
+Train Loss: 0.3851 | Train Acc: 0.9864
+Val   Loss: 0.3731 | Val   Acc: 0.9896 | Val F1: 0.9911
+Val Class F1s: ['0.9846', '1.0000', '0.9922', '0.9876']
+EarlyStopping counter: 6 out of 10
+
+Epoch 40/60
+LR: 0.000003                                                                                                                   
+Train Loss: 0.3822 | Train Acc: 0.9883
+Val   Loss: 0.3702 | Val   Acc: 0.9922 | Val F1: 0.9928
+Val Class F1s: ['0.9847', '1.0000', '0.9939', '0.9925']
+EarlyStopping counter: 7 out of 10
+
+Epoch 41/60
+LR: 0.000003                                                                                                                   
+Train Loss: 0.3845 | Train Acc: 0.9869
+Val   Loss: 0.3685 | Val   Acc: 0.9931 | Val F1: 0.9942
+Val Class F1s: ['0.9908', '1.0000', '0.9948', '0.9913']
+EarlyStopping counter: 8 out of 10
+
+Epoch 42/60
+LR: 0.000003                                                                                                                   
+Train Loss: 0.3838 | Train Acc: 0.9875
+Val   Loss: 0.3681 | Val   Acc: 0.9922 | Val F1: 0.9932
+Val Class F1s: ['0.9877', '1.0000', '0.9939', '0.9913']
+EarlyStopping counter: 9 out of 10
+
+Epoch 43/60
+LR: 0.000003                                                                                                                   
+Train Loss: 0.3798 | Train Acc: 0.9888
+Val   Loss: 0.3663 | Val   Acc: 0.9922 | Val F1: 0.9932
+Val Class F1s: ['0.9877', '1.0000', '0.9939', '0.9913']
+EarlyStopping counter: 10 out of 10
+Early stopping triggered. Finished.
+
+ Model Evaluation:
+Test Loss: 0.3709 | Test Acc: 0.9926                                                                                           
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0     0.9969    0.9938    0.9954       324
+           1     1.0000    1.0000    1.0000        23
+           2     0.9931    0.9939    0.9935      1153
+           3     0.9900    0.9900    0.9900       804
+
+    accuracy                         0.9926      2304
+   macro avg     0.9950    0.9945    0.9947      2304
+weighted avg     0.9926    0.9926    0.9926      2304
+
+
+Confusion Matrix:
+[[ 322    0    0    2]
+ [   0   23    0    0]
+ [   1    0 1146    6]
+ [   0    0    8  796]]
