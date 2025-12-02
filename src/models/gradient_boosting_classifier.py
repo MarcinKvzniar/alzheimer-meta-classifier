@@ -515,26 +515,26 @@ def main():
     )
     
     # Use subset for faster testing (remove for full training)
-    print("\nNote: Using subset of data for demonstration...")
-    train_subset = train_data.select(range(min(1000, len(train_data))))
-    val_subset = val_data.select(range(min(200, len(val_data))))
-    test_subset = test_data.select(range(min(200, len(test_data))))
+    # print("\nNote: Using subset of data for demonstration...")
+    # train_subset = train_data.select(range(min(1000, len(train_data))))
+    # val_subset = val_data.select(range(min(200, len(val_data))))
+    # test_subset = test_data.select(range(min(200, len(test_data))))
     
     # Train
-    train_results = classifier.train(train_subset, val_subset)
+    train_results = classifier.train(train_data, val_data)
     
     # Evaluate on test set
     print("\n" + "=" * 80)
     print("Test Set Evaluation")
     print("=" * 80)
-    test_metrics = classifier.evaluate(test_subset, dataset_name="Test")
+    test_metrics = classifier.evaluate(test_data, dataset_name="Test")
     
     # Test single prediction
     print("\n" + "=" * 80)
     print("Single Image Prediction Test")
     print("=" * 80)
-    sample_image = test_subset[0]['image']
-    sample_label = test_subset[0]['label']
+    sample_image = test_data[0]['image']
+    sample_label = test_data[0]['label']
     
     prediction = classifier.predict(sample_image)
     probabilities = classifier.predict_proba(sample_image)
