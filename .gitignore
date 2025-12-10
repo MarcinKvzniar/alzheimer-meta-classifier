@@ -251,11 +251,11 @@ raw_data/**/*.txt
 # =============================================================================
 
 # Experiment results
-results/
 outputs/
 experiments/
 predictions/
 evaluations/
+models/
 
 # Plots and visualizations
 figures/
